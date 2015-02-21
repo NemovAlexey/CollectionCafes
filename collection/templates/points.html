@@ -1,0 +1,39 @@
+{% extends 'main.html' %}
+
+{% block points %}
+
+<div class="container">
+    <label><input type="button" value="Сброс" onclick="location.href ='{% url 'collection:reset' %}'"></label>
+    <div class="row">
+     {%for company in companies %}
+        <div class="col-md-4">
+            <h3><strong>{{	company.id }}. <a href="{% url 'collection:company_on_map' company.id %}">{{ company.company_name }}</a></strong></h3>
+            {% for point in points %}
+                {% if company.id == point.point_company.id %}
+                    <p>
+                        <img src="/static/img/{{ company.company_logo }}" height="20px", width="20px" align="left">
+                        <font color="{{ company.company_color }}">
+                            <h4><a href="{% url 'collection:detail' point.id %}">{{ point.point_address }}</a></h4>
+                        </font>
+                    </p>
+                    <h4>Телефон: {{ point.point_telephone }}</h4>
+                    <h5>Время инкассации: {{ point.point_time_collection }}</h5>
+                    <font color="{{ point.point_delay_color }}">
+                        <h5>Задержка инкассации: {{ point.point_delay_collection }}</h5>
+                    </font>
+                    <input type="button" value="Инкассация проведена"
+                                  onclick="location.href ='{% url 'collection:status' point.id %}'">
+                    {% if point.point_status_collection == False %}
+                        <img src="/static/img/false.png" height="20px", width="20px" align="center">
+                    {% else %}
+                        <img src="/static/img/true.png" height="20px", width="20px" align="center">
+                    {% endif %}
+                    <hr>
+                {% endif %}
+            {% endfor %}
+            <hr>
+        </div> <!--col-md-4   -->
+     {% endfor %}
+    </div> <!--row   -->
+</div> <!--container   -->
+{% endblock %}
